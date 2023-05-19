@@ -1,0 +1,20 @@
+# FROM bellsoft/liberica-openjdk-alpine:11.0.16
+# COPY ./java ./src
+# RUN mkdir ./out
+# RUN javac -sourcepath ./src -d out src/ru/gb/lesson1/sample/Main.java
+# CMD java -classpath ./out ru.gb.lesson1.sample.Main
+
+
+# FROM bellsoft/liberica-openjdk-alpine:11.0.19 as FirstStep
+# WORKDIR /app
+# COPY ./java ./src
+# RUN mkdir ./out
+# RUN javac -sourcepath ./src -d out ./src/ru/gb/lesson1/sample/Main.java
+
+# FROM scratch as OutputFiles
+# COPY --from=FirstStep /app/out /bin
+
+FROM bellsoft/liberica-openjdk-alpine:11.0.16
+WORKDIR /app
+COPY ./bin .
+CMD java -classpath . ru.gb.lesson1.sample.Main
