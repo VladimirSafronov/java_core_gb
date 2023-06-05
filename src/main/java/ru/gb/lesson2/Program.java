@@ -222,10 +222,10 @@ public class Program {
     int y = coordinates[1];
 
     if (x < fieldSizeX) {
-      return checkAiMoveDown(x, y, c)
-          || checkAiMoveDownLeft(x, y, c)
-          || checkAiMoveDownRight(x, y, c)
-          || checkAiMoveRight(x, y, c);
+//      return checkAiMoveDown(x, y, c)
+//          || checkAiMoveDownLeft(x, y, c)
+//          || checkAiMoveDownRight(x, y, c)
+//          || checkAiMoveRight(x, y, c);
     }
     return false;
   }
@@ -258,9 +258,15 @@ public class Program {
 
   /**
    * Вспомогательный метод проверки по диагонали вниз и влево (для компьютера)
+   * Возвращает координаты опасной для компьютера точки, либо -1; -1
    */
-  private static boolean checkAiMoveDownLeft(int x, int y, char c) {
-    return checkDownLeft(x, y, c, DANGER_COUNT);
+  private static int[] checkAiMoveDownLeft(int x, int y, char c) {
+    int[] coordinates = new int[]{-1, -1};
+    if (checkDownLeft(x, y, c, DANGER_COUNT)) {
+      coordinates[0] = x;
+      coordinates[1] = y;
+    }
+    return coordinates;
   }
 
   /**
