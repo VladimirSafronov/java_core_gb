@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import ru.gb.lesson5.seminar.exception.NotDirectoryException;
 
 public class Program {
 
@@ -17,28 +23,30 @@ public class Program {
   private final static int CHAR_BOUND_HIGH = 90;
   private final static String WORD_FOR_SEARCH = "GeekBrains";
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, NotDirectoryException {
     writeFileContents("sample01.txt", 30);
     System.out.println(isContainsInFile("sample01.txt", WORD_FOR_SEARCH));
     writeFileContents("sample02.txt", 30, 5);
     System.out.println(isContainsInFile("sample02.txt", WORD_FOR_SEARCH));
     concatenateFiles("sample01.txt", "sample02.txt", "sampleConc.txt");
     System.out.println(isContainsInFile("sampleConc.txt", WORD_FOR_SEARCH));
+//
+//    String[] fileNames = new String[10];
+//    for (int i = 1; i < 6; i++) {
+//      fileNames[i] = "file_" + i + ".txt";
+//      writeFileContents(fileNames[i], 100, 4);
+//      System.out.printf("Файл %s создан\n", fileNames[i]);
+//    }
+//
+//    List<String> res = searchMatch(fileNames, WORD_FOR_SEARCH);
+//
+//    for (String file : res) {
+//      System.out.printf("Файл %s содержит искомое слово '%s'\n", file, WORD_FOR_SEARCH);
+//    }
 
-    String[] fileNames = new String[10];
-    for (int i = 1; i < 6; i++) {
-      fileNames[i] = "file_" + i + ".txt";
-      writeFileContents(fileNames[i], 100, 4);
-      System.out.printf("Файл %s создан\n", fileNames[i]);
-    }
+//    Tree.print(new File("."), "", true);
 
-    List<String> res = searchMatch(fileNames, WORD_FOR_SEARCH);
-
-    for (String file : res) {
-      System.out.printf("Файл %s содержит искомое слово '%s'\n", file, WORD_FOR_SEARCH);
-    }
-
-    Tree.print(new File("."), "", true);
+    copyFiles(new File("/Users/vladimirsafronov/Desktop/it"));
   }
 
   /**
@@ -151,8 +159,9 @@ public class Program {
 
   /**
    * Поиск слова в папке с файлами
+   *
    * @param files адрес папки
-   * @param word искомое слово
+   * @param word  искомое слово
    * @return список файлов содержащих слово
    * @throws IOException
    */
@@ -174,5 +183,26 @@ public class Program {
       }
     }
     return list;
+  }
+
+  /**
+   * Функция, создающая резервную копию всех файлов в директории(без поддиректорий) во вновь
+   * созданную папку ./backup
+   *
+   * @param file директория, чьи файлы копируются
+   * @throws NotDirectoryException
+   */
+  private static void copyFiles(File file) throws NotDirectoryException, IOException {
+    if (!file.isDirectory()) {
+      throw new NotDirectoryException();
+    }
+    Path directoryForCopy = Paths.get("./backup");
+    Files.createDirectory(directoryForCopy);
+    for (File src : Objects.requireNonNull(file.listFiles())) {
+      if (src.isFile()) {
+        Path dest = Paths.get(directoryForCopy + "/" + src.getName());
+        Files.copy(src.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
+      }
+    }
   }
 }
