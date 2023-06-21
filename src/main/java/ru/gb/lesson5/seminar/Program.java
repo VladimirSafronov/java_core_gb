@@ -24,27 +24,27 @@ public class Program {
   private final static String WORD_FOR_SEARCH = "GeekBrains";
 
   public static void main(String[] args) throws IOException, NotDirectoryException {
-    writeFileContents("sample01.txt", 30);
-    System.out.println(isContainsInFile("sample01.txt", WORD_FOR_SEARCH));
-    writeFileContents("sample02.txt", 30, 5);
-    System.out.println(isContainsInFile("sample02.txt", WORD_FOR_SEARCH));
-    concatenateFiles("sample01.txt", "sample02.txt", "sampleConc.txt");
-    System.out.println(isContainsInFile("sampleConc.txt", WORD_FOR_SEARCH));
-
-    String[] fileNames = new String[10];
-    for (int i = 1; i < 6; i++) {
-      fileNames[i] = "file_" + i + ".txt";
-      writeFileContents(fileNames[i], 100, 4);
-      System.out.printf("Файл %s создан\n", fileNames[i]);
-    }
-
-    List<String> res = searchMatch(fileNames, WORD_FOR_SEARCH);
-
-    for (String file : res) {
-      System.out.printf("Файл %s содержит искомое слово '%s'\n", file, WORD_FOR_SEARCH);
-    }
-
-    Tree.print(new File("."), "", true);
+//    writeFileContents("sample01.txt", 30);
+//    System.out.println(isContainsInFile("sample01.txt", WORD_FOR_SEARCH));
+//    writeFileContents("sample02.txt", 30, 5);
+//    System.out.println(isContainsInFile("sample02.txt", WORD_FOR_SEARCH));
+//    concatenateFiles("sample01.txt", "sample02.txt", "sampleConc.txt");
+//    System.out.println(isContainsInFile("sampleConc.txt", WORD_FOR_SEARCH));
+//
+//    String[] fileNames = new String[10];
+//    for (int i = 1; i < 6; i++) {
+//      fileNames[i] = "file_" + i + ".txt";
+//      writeFileContents(fileNames[i], 100, 4);
+//      System.out.printf("Файл %s создан\n", fileNames[i]);
+//    }
+//
+//    List<String> res = searchMatch(fileNames, WORD_FOR_SEARCH);
+//
+//    for (String file : res) {
+//      System.out.printf("Файл %s содержит искомое слово '%s'\n", file, WORD_FOR_SEARCH);
+//    }
+//
+//    Tree.print(new File("."), "", true);
 
     copyFiles(new File("/Users/vladimirsafronov/Desktop/it"));
   }
@@ -197,7 +197,9 @@ public class Program {
       throw new NotDirectoryException();
     }
     Path directoryForCopy = Paths.get("./backup");
-    Files.createDirectory(directoryForCopy);
+    if (!Files.exists(directoryForCopy)) {
+      Files.createDirectory(directoryForCopy);
+    }
     for (File src : Objects.requireNonNull(file.listFiles())) {
       if (src.isFile()) {
         Path dest = Paths.get(directoryForCopy + "/" + src.getName());
